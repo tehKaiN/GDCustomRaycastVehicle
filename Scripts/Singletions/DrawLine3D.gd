@@ -42,7 +42,7 @@ func _draw():
 	var i = Lines.size() - 1
 	while (i >= 0):
 		if(Lines[i]._Time < 0.0):
-			Lines.remove(i)
+			Lines.remove_at(i)
 			RemovedLine = true
 		i -= 1
 
