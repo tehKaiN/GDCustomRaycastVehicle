@@ -68,7 +68,7 @@ func shape_cast(origin: Vector3, offset: Vector3):
 		# get the velocity of the hit body at point of contact
 		var hitBodyState := PhysicsServer3D.body_get_direct_state(collision.get("rid"))
 		var hitBodyPoint : Vector3 = collision.get("point")
-		result.hit_point_velocity = hitBodyState.get_velocity_at_local_position((hitBodyPoint) * hitBodyState.transform)
+		result.hit_point_velocity = hitBodyState.get_velocity_at_local_position(hitBodyPoint * hitBodyState.transform)
 		if GameState.debugMode:
 			DrawLine3D.DrawRay(result.hit_position,result.hit_point_velocity,Color(0,0,0))
 	
@@ -89,7 +89,7 @@ func apply_brake(amount : float = 0.0) -> void:
 # function for applying drive force to parent body (if grounded)
 func apply_force(force : Vector3) -> void:
 	if is_colliding():
-		parentBody.apply_force(get_collision_point() - parentBody.global_transform.origin, force)
+		parentBody.apply_force(force, get_collision_point() - parentBody.global_transform.origin)
 
 func _physics_process(delta) -> void:
 	# perform sphere cast
@@ -143,11 +143,11 @@ func _physics_process(delta) -> void:
 			DrawLine3D.DrawRay(get_collision_point(),ZForce/GameState.debugRayScaleFac,Color(0,0,255))
 			
 		# apply forces relative to parent body
-		parentBody.apply_force(get_collision_point() - parentBody.global_transform.origin, finalForce)
+		parentBody.apply_force(finalForce, get_collision_point() - parentBody.global_transform.origin)
 		
 		# apply forces to body affected by this drive element (action = reaction)
 		if castResult.hit_body && castResult.hit_body is RigidBody3D:
-			castResult.hit_body.apply_force(get_collision_point() - castResult.hit_body.global_transform.origin, -finalForce)
+			castResult.hit_body.apply_force(-finalForce, get_collision_point() - castResult.hit_body.global_transform.origin)
 		
 		# set the previous values at the very end, after they have been used
 		previousDistance = curDistance

@@ -56,7 +56,7 @@ func _handle_physics(delta) -> void:
 	
 	# get force from torque curve (based on current speed)
 	currentDrivePower = torqueCurve.sample_baked(speedInterp) * drivePerRay
-	
+
 	# handle drive and braking for tracks depending on mode
 	if driveTrainMode == DriveMode.DOUBLE_DIFF:
 		# double differential setup (steer with control of drive force)
@@ -162,9 +162,9 @@ func _handle_physics(delta) -> void:
 		
 		# apply track forces
 		if leftTrackGrounded:
-			apply_force(to_global(Vector3(1.5, -0.2, 0)) - global_transform.origin, leftDriveForce)
+			apply_force(leftDriveForce, to_global(Vector3(1.5, -0.2, 0)) - global_transform.origin)
 		if rightTrackGrounded:
-			apply_force(to_global(Vector3(-1.5, -0.2, 0)) - global_transform.origin, rightDriveForce)
+			apply_force(rightDriveForce, to_global(Vector3(-1.5, -0.2, 0)) - global_transform.origin)
 
 func _ready() -> void:
 	# setup arrays of drive elements and setup drive power
