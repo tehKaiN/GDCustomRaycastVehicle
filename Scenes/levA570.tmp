@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dkpsi42ejenym"]
+[gd_scene load_steps=9 format=3 uid="uid://d2v2fggb4pjtr"]
 
 [ext_resource type="Script" path="res://Scripts/Speedometer.gd" id="1"]
 [ext_resource type="PackedScene" path="res://Objects/TestLevel.tscn" id="2"]
@@ -17,15 +17,14 @@ func _on_ChangeButton_pressed():
 script/source = "extends Label
 
 func _process(delta):
-	text = \"FPS: %f\" % Performance.get_monitor(Performance.TIME_FPS)
+	text = \"FPS: %f\" + Performance.get_monitor(Performance.TIME_FPS)
 "
 
 [sub_resource type="GDScript" id="3"]
 script/source = "extends Label
 
 func _process(delta):
-	text = \"Physics frame time (ms): %f\" % (Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS ) * 1000)
-"
+	text = \"Physics frame time (ms): \" + String((Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS ) * 1000))"
 
 [node name="gameRoot" type="Node"]
 
@@ -40,7 +39,7 @@ script = SubResource("1")
 [node name="VBL" parent="." instance=ExtResource("3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -6)
 
-[node name="CameraRig" parent="." node_paths=PackedStringArray("_camTarget") instance=ExtResource("4")]
+[node name="CameraRig" parent="." instance=ExtResource("4")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 5, -6)
 maxZoom = 16.0
 camYOffset = 3.0
@@ -86,6 +85,9 @@ offset_bottom = 106.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Physics (ms): 0"
 script = SubResource("3")
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ChangeButton" type="Button" parent="DebugUI"]
 layout_mode = 0
@@ -97,7 +99,7 @@ offset_right = 543.998
 offset_bottom = 62.0
 text = "Change to Tracked vehicle"
 
-[node name="Speedometer" type="Label" parent="." node_paths=PackedStringArray("vehicle")]
+[node name="Speedometer" type="Label" parent="."]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0

@@ -79,7 +79,7 @@ func _handle_physics(delta) -> void:
 			speedInterp = remap(abs(currentSpeed), 0.0, maxSpeedKph / 3.6, 0.0, 1.0)
 		elif forwardDrive < 0:
 			speedInterp = remap(abs(currentSpeed), 0.0, maxReverseSpeedKph / 3.6, 0.0, 1.0)
-		currentDrivePower = torqueCurve.interpolate_baked(speedInterp) * drivePerRay
+		currentDrivePower = torqueCurve.sample_baked(speedInterp) * drivePerRay
 		
 		finalForce = global_transform.basis.z * currentDrivePower * forwardDrive
 		
@@ -97,5 +97,5 @@ func _ready() -> void:
 	
 func _physics_process(delta) -> void:
 	# calculate forward speed
-	currentSpeed = (linear_velocity) * global_transform.basis.z
+	currentSpeed = (linear_velocity * global_transform.basis).z
 	_handle_physics(delta)

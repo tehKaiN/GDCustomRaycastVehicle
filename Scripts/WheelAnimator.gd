@@ -16,7 +16,7 @@ func _ready() -> void:
 func _physics_process(delta) -> void:
 	# obtain velocity of the wheel
 	var instantV = (global_transform.origin - lastPos) / delta
-	var ZVel = (instantV) * wheelRay.global_transform.basis.z
+	var ZVel = (instantV * wheelRay.global_transform.basis).z
 	lastPos = global_transform.origin
 	
 	# rotate the wheel according to speed
