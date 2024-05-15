@@ -11,7 +11,7 @@ extends Node3D
 @export var horizontalSensitivity : float = 0.002
 @export var camYOffset : float = 4.0
 @export var camLerpSpeed : float = 16.0
-@export(NodePath) onready var _camTarget = get_node(_camTarget) as Node3D
+@export var _camTarget : Node3D
 
 # Private variables
 @onready var _springArm : SpringArm3D = get_node("SpringArm3D")

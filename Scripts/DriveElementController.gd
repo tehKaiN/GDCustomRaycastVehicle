@@ -45,7 +45,8 @@ func shape_cast(origin: Vector3, offset: Vector3):
 	params.exclude = [parentBody]
 	
 	# cast motion to get max motion possible with this cast
-	var castResult = space.cast_motion(params, offset)
+	params.motion = offset
+	var castResult = space.cast_motion(params)
 
 	var result : ShapeCastResult = ShapeCastResult.new()
 	

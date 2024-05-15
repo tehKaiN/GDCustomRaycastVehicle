@@ -55,7 +55,7 @@ func _handle_physics(delta) -> void:
 		speedInterp = 0
 	
 	# get force from torque curve (based on current speed)
-	currentDrivePower = torqueCurve.interpolate_baked(speedInterp) * drivePerRay
+	currentDrivePower = torqueCurve.sample_baked(speedInterp) * drivePerRay
 	
 	# handle drive and braking for tracks depending on mode
 	if driveTrainMode == DriveMode.DOUBLE_DIFF:
