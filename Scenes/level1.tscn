@@ -10,7 +10,7 @@
 script/source = "extends Node
 
 func _on_ChangeButton_pressed():
-	get_tree().change_scene(\"res://Scenes/level0.tscn\")
+	get_tree().change_scene_to_file(\"res://Scenes/level0.tscn\")
 "
 
 [sub_resource type="GDScript" id=2]
@@ -37,10 +37,10 @@ script = SubResource( 1 )
 [node name="TestLevel" parent="." instance=ExtResource( 2 )]
 
 [node name="VBL" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -6 )
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -6 )
 
 [node name="CameraRig" parent="." instance=ExtResource( 4 )]
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 5, -6 )
+transform = Transform3D( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 5, -6 )
 maxZoom = 16.0
 camYOffset = 3.0
 _camTarget = NodePath("../VBL")
@@ -50,11 +50,11 @@ _camTarget = NodePath("../VBL")
 [node name="Hint" type="Label" parent="DebugUI"]
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 20.0
-margin_top = 20.0
-margin_right = 512.0
-margin_bottom = 64.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 512.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Press ` to enable/disable viewing of forces.
 Press ESC to restrict/unrestrict mouse to window.
 Press R to reset vehicle."
@@ -65,22 +65,22 @@ __meta__ = {
 [node name="FPS" type="Label" parent="DebugUI"]
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 20.0
-margin_top = 72.0
-margin_right = 58.0
-margin_bottom = 86.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
+offset_left = 20.0
+offset_top = 72.0
+offset_right = 58.0
+offset_bottom = 86.0
+theme_override_colors/font_color = Color( 0, 0, 0, 1 )
 text = "FPS: 0"
 script = SubResource( 2 )
 
 [node name="PhysicsMS" type="Label" parent="DebugUI"]
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 20.0
-margin_top = 92.0
-margin_right = 116.0
-margin_bottom = 106.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
+offset_left = 20.0
+offset_top = 92.0
+offset_right = 116.0
+offset_bottom = 106.0
+theme_override_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Physics (ms): 0"
 script = SubResource( 3 )
 __meta__ = {
@@ -90,10 +90,10 @@ __meta__ = {
 [node name="ChangeButton" type="Button" parent="DebugUI"]
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 360.998
-margin_top = 20.0
-margin_right = 543.998
-margin_bottom = 62.0
+offset_left = 360.998
+offset_top = 20.0
+offset_right = 543.998
+offset_bottom = 62.0
 text = "Change to Tracked vehicle"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -104,9 +104,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -120.0
-margin_top = -80.0
-margin_right = 120.0
+offset_left = -120.0
+offset_top = -80.0
+offset_right = 120.0
 text = "0 KM/H"
 align = 1
 script = ExtResource( 1 )

@@ -1,24 +1,24 @@
-extends Spatial
+extends Node3D
 class_name DriveElement
 
 # control variables
-export var shape : Shape
-export(int, LAYERS_3D_PHYSICS) var mask : int = 1
-export var castTo : Vector3 = Vector3(0,-1,0)
-export var springMaxForce : float = 300.0
-export var springForce : float = 180.0
-export var stifness : float = 0.85
-export var damping : float = 0.05
-export var Xtraction : float = 1.0
-export var Ztraction : float = 0.15
-export var staticSlideThreshold : float = 0.005
-export var massKG : float = 100.0
+@export var shape : Shape3D
+@export var mask : int = 1 # (int, LAYERS_3D_PHYSICS)
+@export var castTo : Vector3 = Vector3(0,-1,0)
+@export var springMaxForce : float = 300.0
+@export var springForce : float = 180.0
+@export var stifness : float = 0.85
+@export var damping : float = 0.05
+@export var Xtraction : float = 1.0
+@export var Ztraction : float = 0.15
+@export var staticSlideThreshold : float = 0.005
+@export var massKG : float = 100.0
 
 # public variables
 var instantLinearVelocity : Vector3
 
 # private variables
-onready var parentBody : RigidBody = get_parent()
+@onready var parentBody : RigidBody3D = get_parent()
 
 var previousDistance : float = abs(castTo.y)
 var previousHit : ShapeCastResult = ShapeCastResult.new()
@@ -31,12 +31,12 @@ class ShapeCastResult:
 	var hit_position : Vector3
 	var hit_normal : Vector3
 	var hit_point_velocity : Vector3
-	var hit_body : PhysicsBody
+	var hit_body : PhysicsBody3D
 
 # function to do sphere casting
 func shape_cast(origin: Vector3, offset: Vector3):
-	var space: PhysicsDirectSpaceState = get_world().direct_space_state as PhysicsDirectSpaceState
-	var params: = PhysicsShapeQueryParameters.new()
+	var space: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state as PhysicsDirectSpaceState3D
+	var params: = PhysicsShapeQueryParameters3D.new()
 	params.collision_mask = mask
 	params.set_shape(shape)
 	params.transform = transform
@@ -63,11 +63,11 @@ func shape_cast(origin: Vector3, offset: Vector3):
 	# if a valid object has been hit
 	if collision.get("rid"):
 		# get the reference to the actual PhysicsBody that we are in contact with
-		result.hit_body = instance_from_id(PhysicsServer.body_get_object_instance_id(collision.get("rid")))
+		result.hit_body = instance_from_id(PhysicsServer3D.body_get_object_instance_id(collision.get("rid")))
 		# get the velocity of the hit body at point of contact
-		var hitBodyState := PhysicsServer.body_get_direct_state(collision.get("rid"))
+		var hitBodyState := PhysicsServer3D.body_get_direct_state(collision.get("rid"))
 		var hitBodyPoint : Vector3 = collision.get("point")
-		result.hit_point_velocity = hitBodyState.get_velocity_at_local_position(hitBodyState.transform.xform_inv(hitBodyPoint))
+		result.hit_point_velocity = hitBodyState.get_velocity_at_local_position((hitBodyPoint) * hitBodyState.transform)
 		if GameState.debugMode:
 			DrawLine3D.DrawRay(result.hit_position,result.hit_point_velocity,Color(0,0,0))
 	
@@ -88,7 +88,7 @@ func apply_brake(amount : float = 0.0) -> void:
 # function for applying drive force to parent body (if grounded)
 func apply_force(force : Vector3) -> void:
 	if is_colliding():
-		parentBody.add_force(force, get_collision_point() - parentBody.global_transform.origin)
+		parentBody.apply_force(get_collision_point() - parentBody.global_transform.origin, force)
 
 func _physics_process(delta) -> void:
 	# perform sphere cast
@@ -117,7 +117,7 @@ func _physics_process(delta) -> void:
 		var suspensionForceVec : Vector3 = castResult.hit_normal * suspensionForce
 		
 		# obtain axis velocity
-		var localVelocity : Vector3 = global_transform.basis.xform_inv(instantLinearVelocity - castResult.hit_point_velocity) 
+		var localVelocity : Vector3 = (instantLinearVelocity - castResult.hit_point_velocity) * global_transform.basis 
 		
 		# axis deceleration forces based on this drive elements mass and current acceleration
 		var XAccel : float = (-localVelocity.x * Xtraction) / delta
@@ -142,11 +142,11 @@ func _physics_process(delta) -> void:
 			DrawLine3D.DrawRay(get_collision_point(),ZForce/GameState.debugRayScaleFac,Color(0,0,255))
 			
 		# apply forces relative to parent body
-		parentBody.add_force(finalForce, get_collision_point() - parentBody.global_transform.origin)
+		parentBody.apply_force(get_collision_point() - parentBody.global_transform.origin, finalForce)
 		
 		# apply forces to body affected by this drive element (action = reaction)
-		if castResult.hit_body && castResult.hit_body is RigidBody:
-			castResult.hit_body.add_force(-finalForce, get_collision_point() - castResult.hit_body.global_transform.origin)
+		if castResult.hit_body && castResult.hit_body is RigidBody3D:
+			castResult.hit_body.apply_force(get_collision_point() - castResult.hit_body.global_transform.origin, -finalForce)
 		
 		# set the previous values at the very end, after they have been used
 		previousDistance = curDistance

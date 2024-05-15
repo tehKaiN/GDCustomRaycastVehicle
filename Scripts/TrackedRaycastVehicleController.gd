@@ -1,4 +1,4 @@
-extends RigidBody
+extends RigidBody3D
 
 # control mode enumerator
 enum DriveMode {
@@ -8,20 +8,20 @@ enum DriveMode {
 }
 
 # control variables
-export(DriveMode) var driveTrainMode = DriveMode.DOUBLE_DIFF
-export(bool) var invertSteerWhenReverse : bool = false
+@export var driveTrainMode: DriveMode = DriveMode.DOUBLE_DIFF
+@export var invertSteerWhenReverse: bool = false
 
-export(float) var enginePower : float = 150
-export(Curve) var torqueCurve : Curve
+@export var enginePower: float = 150
+@export var torqueCurve: Curve
 
-export(float) var maxSpeedKph : float = 65.0
-export(float) var maxReverseSpeedKph : float = 20.0
+@export var maxSpeedKph: float = 65.0
+@export var maxReverseSpeedKph: float = 20.0
 
-export(float) var trackBrakePercent : float = 0.1
-export(float) var trackBrakingSpeed : float = 0.1
-export(float) var rollingResistance : float = 0.02
+@export var trackBrakePercent: float = 0.1
+@export var trackBrakingSpeed: float = 0.1
+@export var rollingResistance: float = 0.02
 
-export(float) var autoStopSpeedMS : float = 1.0
+@export var autoStopSpeedMS: float = 1.0
 
 var leftDriveElements : Array = []
 var rightDriveElements : Array = []
@@ -46,10 +46,10 @@ func _handle_physics(delta) -> void:
 	var speedInterp : float
 	# forward, use forward max speed
 	if forwardDrive > 0:
-		speedInterp = range_lerp(abs(currentSpeed), 0.0, maxSpeedKph / 3.6, 0.0, 1.0)
+		speedInterp = remap(abs(currentSpeed), 0.0, maxSpeedKph / 3.6, 0.0, 1.0)
 	# reverse, use reverse max speed
 	elif forwardDrive < 0:
-		speedInterp = range_lerp(abs(currentSpeed), 0.0, maxReverseSpeedKph / 3.6, 0.0, 1.0)
+		speedInterp = remap(abs(currentSpeed), 0.0, maxReverseSpeedKph / 3.6, 0.0, 1.0)
 	# steering drive (always at start of curve)
 	elif forwardDrive == 0 && steering != 0:
 		speedInterp = 0
@@ -162,9 +162,9 @@ func _handle_physics(delta) -> void:
 		
 		# apply track forces
 		if leftTrackGrounded:
-			add_force(leftDriveForce, to_global(Vector3(1.5, -0.2, 0)) - global_transform.origin)
+			apply_force(to_global(Vector3(1.5, -0.2, 0)) - global_transform.origin, leftDriveForce)
 		if rightTrackGrounded:
-			add_force(rightDriveForce, to_global(Vector3(-1.5, -0.2, 0)) - global_transform.origin)
+			apply_force(to_global(Vector3(-1.5, -0.2, 0)) - global_transform.origin, rightDriveForce)
 
 func _ready() -> void:
 	# setup arrays of drive elements and setup drive power

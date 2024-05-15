@@ -1,9 +1,9 @@
 extends Node
 
-export(NodePath) var vehiclePath
+@export var vehiclePath: NodePath
 
-var vehicle : RigidBody
-var vehicleStartTransform : Transform
+var vehicle : RigidBody3D
+var vehicleStartTransform : Transform3D
 
 func _ready():
 	vehicle = get_node(vehiclePath)

@@ -1,9 +1,9 @@
-extends MeshInstance
+extends MeshInstance3D
 
 # public variables
-export var wheelOffset : Vector3 = Vector3(0,0.5,0)
-export var wheelSpeedScaling : float = 1.0
-export var returnSpeed : float = 8.0
+@export var wheelOffset : Vector3 = Vector3(0,0.5,0)
+@export var wheelSpeedScaling : float = 1.0
+@export var returnSpeed : float = 8.0
 
 # private variables
 var wheelRay
@@ -16,7 +16,7 @@ func _ready() -> void:
 func _physics_process(delta) -> void:
 	# obtain velocity of the wheel
 	var instantV = (global_transform.origin - lastPos) / delta
-	var ZVel = wheelRay.global_transform.basis.xform_inv(instantV).z
+	var ZVel = (instantV) * wheelRay.global_transform.basis.z
 	lastPos = global_transform.origin
 	
 	# rotate the wheel according to speed

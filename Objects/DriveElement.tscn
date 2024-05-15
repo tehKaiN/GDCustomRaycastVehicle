@@ -1,12 +1,11 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://dsiudjmfs6qrk"]
 
-[ext_resource path="res://Scripts/DriveElementController.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://Scripts/DriveElementController.gd" id="1"]
 
-[sub_resource type="SphereShape" id=1]
+[sub_resource type="SphereShape3D" id="1"]
 resource_local_to_scene = true
-radius = 0.5
 
-[node name="DriveElement" type="Spatial"]
-script = ExtResource( 1 )
-shape = SubResource( 1 )
-castTo = Vector3( 0, -0.5, 0 )
+[node name="DriveElement" type="Node3D"]
+script = ExtResource("1")
+shape = SubResource("1")
+castTo = Vector3(0, -0.5, 0)

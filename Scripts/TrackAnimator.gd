@@ -1,19 +1,19 @@
-extends MeshInstance
+extends MeshInstance3D
 
 # public variables
-export var roadWheelPaths : Array
-export(NodePath) var sprocketPath
-export(NodePath) var idlerPath
-export var wheelSpeedScaling : float = 1.0
-export var sprocketSpeedScaling : float = 1.6
-export var idlerSpeedScaling : float = 1.5
-export var trackUVScaling : float = 1.0
+@export var roadWheelPaths : Array
+@export var sprocketPath: NodePath
+@export var idlerPath: NodePath
+@export var wheelSpeedScaling : float = 1.0
+@export var sprocketSpeedScaling : float = 1.6
+@export var idlerSpeedScaling : float = 1.5
+@export var trackUVScaling : float = 1.0
 
 # private variables
 var roadWheels : Array
-var sprocket : MeshInstance
-var idler : MeshInstance
-var trackMat : SpatialMaterial
+var sprocket : MeshInstance3D
+var idler : MeshInstance3D
+var trackMat : StandardMaterial3D
 var lastPos : Vector3 = Vector3()
 
 func _ready() -> void:
@@ -27,7 +27,7 @@ func _ready() -> void:
 func _physics_process(delta) -> void:
 	# obtain velocity of the track
 	var instantV = (global_transform.origin - lastPos) / delta
-	var ZVel = global_transform.basis.xform_inv(instantV).z
+	var ZVel = (instantV) * global_transform.basis.z
 	lastPos = global_transform.origin
 		
 	# animate wheels

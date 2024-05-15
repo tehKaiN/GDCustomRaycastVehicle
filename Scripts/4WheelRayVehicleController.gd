@@ -1,24 +1,24 @@
-extends RigidBody
+extends RigidBody3D
 
 # control variables
-export(float) var enginePower : float = 150.0
-export(Curve) var torqueCurve : Curve
+@export var enginePower: float = 150.0
+@export var torqueCurve: Curve
 
-export(float) var maxSpeedKph : float = 100.0
-export(float) var maxReverseSpeedKph : float = 20.0
+@export var maxSpeedKph: float = 100.0
+@export var maxReverseSpeedKph: float = 20.0
 
-export(float) var maxBrakingCoef : float = 0.05
-export(float) var rollingResistance : float = 0.001
+@export var maxBrakingCoef: float = 0.05
+@export var rollingResistance: float = 0.001
 
-export(float) var steeringAngle : float = 30.0
-export(float) var steerSpeed : float = 15.0
-export(float) var maxSteerLimitRatio : float = 0.95
-export(float) var steerReturnSpeed : float = 30.0
+@export var steeringAngle: float = 30.0
+@export var steerSpeed: float = 15.0
+@export var maxSteerLimitRatio: float = 0.95
+@export var steerReturnSpeed: float = 30.0
 
-export(float) var autoStopSpeedMS : float = 1.0
+@export var autoStopSpeedMS: float = 1.0
 
-onready var frontLeftElement: Spatial = $FL_ray
-onready var frontRightElement: Spatial = $FR_ray
+@onready var frontLeftElement: Node3D = $FL_ray
+@onready var frontRightElement: Node3D = $FR_ray
 
 var driveElements : Array = []
 var drivePerRay : float = enginePower
@@ -55,7 +55,7 @@ func _handle_physics(delta) -> void:
 				currentSteerAngle = 0.0
 		
 		# limit steering based on speed and apply steering
-		var maxSteerRatio : float = range_lerp(currentSpeed * 3.6, 0, maxSpeedKph, 0, maxSteerLimitRatio)
+		var maxSteerRatio : float = remap(currentSpeed * 3.6, 0, maxSpeedKph, 0, maxSteerLimitRatio)
 		maxSteerAngle = (1 - maxSteerRatio) * steeringAngle
 		currentSteerAngle = clamp(currentSteerAngle, -maxSteerAngle, maxSteerAngle)
 		frontRightElement.rotation_degrees.y = currentSteerAngle
@@ -76,9 +76,9 @@ func _handle_physics(delta) -> void:
 		# calculate motor forces
 		var speedInterp : float
 		if forwardDrive > 0:
-			speedInterp = range_lerp(abs(currentSpeed), 0.0, maxSpeedKph / 3.6, 0.0, 1.0)
+			speedInterp = remap(abs(currentSpeed), 0.0, maxSpeedKph / 3.6, 0.0, 1.0)
 		elif forwardDrive < 0:
-			speedInterp = range_lerp(abs(currentSpeed), 0.0, maxReverseSpeedKph / 3.6, 0.0, 1.0)
+			speedInterp = remap(abs(currentSpeed), 0.0, maxReverseSpeedKph / 3.6, 0.0, 1.0)
 		currentDrivePower = torqueCurve.interpolate_baked(speedInterp) * drivePerRay
 		
 		finalForce = global_transform.basis.z * currentDrivePower * forwardDrive
@@ -97,5 +97,5 @@ func _ready() -> void:
 	
 func _physics_process(delta) -> void:
 	# calculate forward speed
-	currentSpeed = global_transform.basis.xform_inv(linear_velocity).z
+	currentSpeed = (linear_velocity) * global_transform.basis.z
 	_handle_physics(delta)
