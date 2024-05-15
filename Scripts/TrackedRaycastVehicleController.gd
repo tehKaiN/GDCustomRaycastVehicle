@@ -179,5 +179,5 @@ func _ready() -> void:
 	
 func _physics_process(delta) -> void:
 	# calculate forward speed
-	currentSpeed = global_transform.basis.xform_inv(linear_velocity).z
+	currentSpeed = (linear_velocity * global_transform.basis).z
 	_handle_physics(delta)
