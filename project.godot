@@ -131,6 +131,7 @@ cam_rotate_right={
 
 [physics]
 
+3d/physics_engine="JoltPhysics3D"
 3d/smooth_trimesh_collision=true
 3d/active_soft_world=false
 

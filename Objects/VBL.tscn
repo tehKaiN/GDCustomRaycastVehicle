@@ -1,28 +1,28 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=12 format=3 uid="uid://dnt8lfxubdlaw"]
 
-[ext_resource path="res://BlenderFiles/wheel.mesh" type="ArrayMesh" id=1]
-[ext_resource path="res://BlenderFiles/body.mesh" type="ArrayMesh" id=2]
-[ext_resource path="res://Objects/DriveElement.tscn" type="PackedScene" id=3]
-[ext_resource path="res://default_acceleration_curve.tres" type="Curve" id=4]
-[ext_resource path="res://Scripts/4WheelRayVehicleController.gd" type="Script" id=6]
-[ext_resource path="res://Scripts/WheelAnimator.gd" type="Script" id=7]
+[ext_resource type="ArrayMesh" path="res://BlenderFiles/wheel.mesh" id="1"]
+[ext_resource type="ArrayMesh" path="res://BlenderFiles/body.mesh" id="2"]
+[ext_resource type="PackedScene" uid="uid://dsiudjmfs6qrk" path="res://Objects/DriveElement.tscn" id="3"]
+[ext_resource type="Curve" path="res://default_acceleration_curve.tres" id="4"]
+[ext_resource type="Script" path="res://Scripts/4WheelRayVehicleController.gd" id="6"]
+[ext_resource type="Script" path="res://Scripts/WheelAnimator.gd" id="7"]
 
-[sub_resource type="ConvexPolygonShape3D" id=9]
-points = PackedVector3Array( -0.381204, 0.61475, -1.00431, 0.620142, 0.185176, 1.1655, 0.614991, 0.138278, 1.15619, -0.618852, 0.185176, 1.1655, -0.428267, -0.196104, -0.645233, 0.628041, 0.353618, -1.08844, 0.430134, -0.196783, 0.809517, 0.450761, 0.614828, 0.0680422, 0.445768, -0.211866, -0.547785, -0.62675, 0.353618, -1.08844, -0.428267, -0.196104, 0.808275, -0.449586, 0.614828, 0.0680422, 0.643656, 0.307438, 1.10902, 0.35724, 0.637088, -0.976802, -0.642366, 0.307438, 1.10902, -0.57844, -0.0916944, 0.369873, 0.62344, 0.161269, -0.98425, 0.591816, -0.0983, 0.352921, -0.62215, 0.161269, -0.98425, -0.467776, 0.630743, -0.188589, 0.468462, 0.630318, -0.188346, -0.0467287, -0.00455118, 1.04271, 0.430329, -0.196854, -0.646476, -0.430467, 0.137145, -0.984211, -0.614598, 0.138157, 1.15781, -0.613658, 0.398121, -1.06477, -0.356523, 0.637756, -0.978444, 0.613963, 0.397837, -1.06299, 0.585164, -0.0947081, -0.0709406, -0.615565, 0.0669797, 0.377352, 0.431726, 0.137151, -0.984137, -0.562054, 0.490426, -0.282237, -0.561489, -0.0825432, -0.0890281, -0.356523, 0.637756, -0.454224, 0.587801, 0.444, -0.329947, 0.381881, 0.614118, -1.00262, 0.616728, 0.0670115, 0.187604, 0.513788, 0.559041, 0.138837, 0.35724, 0.637088, -0.453422, -0.613658, 0.398121, -0.450202, 0.0483935, 0.328495, -1.07903, 0.0478847, -0.00448702, 1.04243, -0.554614, 0.486863, 0.230448, -0.615776, 0.0669268, 0.163904, 0.51628, 0.560683, -0.235616, 0.613963, 0.397837, -0.449407, -0.448598, -0.169273, -0.639977, -0.613459, 0.138311, -0.946189 )
+[sub_resource type="ConvexPolygonShape3D" id="9"]
+points = PackedVector3Array(-0.381204, 0.61475, -1.00431, 0.620142, 0.185176, 1.1655, 0.614991, 0.138278, 1.15619, -0.618852, 0.185176, 1.1655, -0.428267, -0.196104, -0.645233, 0.628041, 0.353618, -1.08844, 0.430134, -0.196783, 0.809517, 0.450761, 0.614828, 0.0680422, 0.445768, -0.211866, -0.547785, -0.62675, 0.353618, -1.08844, -0.428267, -0.196104, 0.808275, -0.449586, 0.614828, 0.0680422, 0.643656, 0.307438, 1.10902, 0.35724, 0.637088, -0.976802, -0.642366, 0.307438, 1.10902, -0.57844, -0.0916944, 0.369873, 0.62344, 0.161269, -0.98425, 0.591816, -0.0983, 0.352921, -0.62215, 0.161269, -0.98425, -0.467776, 0.630743, -0.188589, 0.468462, 0.630318, -0.188346, -0.0467287, -0.00455118, 1.04271, 0.430329, -0.196854, -0.646476, -0.430467, 0.137145, -0.984211, -0.614598, 0.138157, 1.15781, -0.613658, 0.398121, -1.06477, -0.356523, 0.637756, -0.978444, 0.613963, 0.397837, -1.06299, 0.585164, -0.0947081, -0.0709406, -0.615565, 0.0669797, 0.377352, 0.431726, 0.137151, -0.984137, -0.562054, 0.490426, -0.282237, -0.561489, -0.0825432, -0.0890281, -0.356523, 0.637756, -0.454224, 0.587801, 0.444, -0.329947, 0.381881, 0.614118, -1.00262, 0.616728, 0.0670115, 0.187604, 0.513788, 0.559041, 0.138837, 0.35724, 0.637088, -0.453422, -0.613658, 0.398121, -0.450202, 0.0483935, 0.328495, -1.07903, 0.0478847, -0.00448702, 1.04243, -0.554614, 0.486863, 0.230448, -0.615776, 0.0669268, 0.163904, 0.51628, 0.560683, -0.235616, 0.613963, 0.397837, -0.449407, -0.448598, -0.169273, -0.639977, -0.613459, 0.138311, -0.946189)
 
-[sub_resource type="SphereShape3D" id=8]
+[sub_resource type="SphereShape3D" id="8"]
 resource_local_to_scene = true
 radius = 0.28
 
-[sub_resource type="SphereShape3D" id=5]
+[sub_resource type="SphereShape3D" id="5"]
 resource_local_to_scene = true
 radius = 0.3
 
-[sub_resource type="SphereShape3D" id=6]
+[sub_resource type="SphereShape3D" id="6"]
 resource_local_to_scene = true
 radius = 0.3
 
-[sub_resource type="SphereShape3D" id=7]
+[sub_resource type="SphereShape3D" id="7"]
 resource_local_to_scene = true
 radius = 0.3
 
@@ -31,24 +31,24 @@ collision_layer = 2
 collision_mask = 3
 mass = 500.0
 angular_damp = 0.2
-script = ExtResource( 6 )
+script = ExtResource("6")
 enginePower = 3000.0
-torqueCurve = ExtResource( 4 )
+torqueCurve = ExtResource("4")
 maxBrakingCoef = 0.01
 steerSpeed = 10.0
 
 [node name="Body" type="MeshInstance3D" parent="."]
-transform = Transform3D( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.203215, 0.0164142 )
-mesh = ExtResource( 2 )
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.203215, 0.0164142)
+mesh = ExtResource("2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.203215, 0.0164142 )
-shape = SubResource( 9 )
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.203215, 0.0164142)
+shape = SubResource("9")
 
-[node name="FL_ray" parent="." instance=ExtResource( 3 )]
-transform = Transform3D( 2, 0, 0, 0, 2, 0, 0, 0, 2, 1, 0.025264, 1.6 )
-shape = SubResource( 8 )
-castTo = Vector3( 0, -0.25, 0 )
+[node name="FL_ray" parent="." instance=ExtResource("3")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 1, 0.025264, 1.6)
+shape = SubResource("8")
+castTo = Vector3(0, -0.25, 0)
 springMaxForce = 30000.0
 springForce = 12000.0
 stifness = 0.75
@@ -57,15 +57,15 @@ Xtraction = 0.05
 Ztraction = 0.0
 
 [node name="wheelFL" type="MeshInstance3D" parent="FL_ray"]
-transform = Transform3D( -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0, 0, 1, 0, 0, 0 )
-mesh = ExtResource( 1 )
-script = ExtResource( 7 )
-wheelOffset = Vector3( 0, 0, 0 )
+transform = Transform3D(-1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0, 0, 1, 0, 0, 0)
+mesh = ExtResource("1")
+script = ExtResource("7")
+wheelOffset = Vector3(0, 0, 0)
 
-[node name="RL_ray" parent="." instance=ExtResource( 3 )]
-transform = Transform3D( 2, 0, 0, 0, 2, 0, 0, 0, 2, 1, 0.025264, -1.2 )
-shape = SubResource( 5 )
-castTo = Vector3( 0, -0.25, 0 )
+[node name="RL_ray" parent="." instance=ExtResource("3")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 1, 0.025264, -1.2)
+shape = SubResource("5")
+castTo = Vector3(0, -0.25, 0)
 springMaxForce = 30000.0
 springForce = 12000.0
 stifness = 0.75
@@ -74,15 +74,15 @@ Xtraction = 0.05
 Ztraction = 0.0
 
 [node name="wheelRL" type="MeshInstance3D" parent="RL_ray"]
-transform = Transform3D( 1.78814e-07, 1, 0, -1, 1.78814e-07, 0, 0, 0, 1, 0, 0, 0 )
-mesh = ExtResource( 1 )
-script = ExtResource( 7 )
-wheelOffset = Vector3( 0, 0, 0 )
+transform = Transform3D(1.78814e-07, 1, 0, -1, 1.78814e-07, 0, 0, 0, 1, 0, 0, 0)
+mesh = ExtResource("1")
+script = ExtResource("7")
+wheelOffset = Vector3(0, 0, 0)
 
-[node name="FR_ray" parent="." instance=ExtResource( 3 )]
-transform = Transform3D( 2, 0, 0, 0, 2, 0, 0, 0, 2, -1, 0.025264, 1.6 )
-shape = SubResource( 6 )
-castTo = Vector3( 0, -0.25, 0 )
+[node name="FR_ray" parent="." instance=ExtResource("3")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1, 0.025264, 1.6)
+shape = SubResource("6")
+castTo = Vector3(0, -0.25, 0)
 springMaxForce = 30000.0
 springForce = 12000.0
 stifness = 0.75
@@ -91,15 +91,15 @@ Xtraction = 0.05
 Ztraction = 0.0
 
 [node name="wheelFR" type="MeshInstance3D" parent="FR_ray"]
-transform = Transform3D( 3.57628e-07, -1, 0, 1, 3.57628e-07, 0, 0, 0, 1, 0, 0, 0 )
-mesh = ExtResource( 1 )
-script = ExtResource( 7 )
-wheelOffset = Vector3( 0, 0, 0 )
+transform = Transform3D(3.57628e-07, -1, 0, 1, 3.57628e-07, 0, 0, 0, 1, 0, 0, 0)
+mesh = ExtResource("1")
+script = ExtResource("7")
+wheelOffset = Vector3(0, 0, 0)
 
-[node name="RR_ray" parent="." instance=ExtResource( 3 )]
-transform = Transform3D( 2, 0, 0, 0, 2, 0, 0, 0, 2, -1, 0.025264, -1.2 )
-shape = SubResource( 7 )
-castTo = Vector3( 0, -0.25, 0 )
+[node name="RR_ray" parent="." instance=ExtResource("3")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1, 0.025264, -1.2)
+shape = SubResource("7")
+castTo = Vector3(0, -0.25, 0)
 springMaxForce = 30000.0
 springForce = 12000.0
 stifness = 0.75
@@ -108,7 +108,7 @@ Xtraction = 0.05
 Ztraction = 0.0
 
 [node name="wheelRR" type="MeshInstance3D" parent="RR_ray"]
-transform = Transform3D( 3.57628e-07, -1, 0, 1, 3.57628e-07, 0, 0, 0, 1, 0, 0, 0 )
-mesh = ExtResource( 1 )
-script = ExtResource( 7 )
-wheelOffset = Vector3( 0, 0, 0 )
+transform = Transform3D(3.57628e-07, -1, 0, 1, 3.57628e-07, 0, 0, 0, 1, 0, 0, 0)
+mesh = ExtResource("1")
+script = ExtResource("7")
+wheelOffset = Vector3(0, 0, 0)

@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://f2qsa7pj8chf"]
 
 [ext_resource type="Script" path="res://Scripts/Speedometer.gd" id="1"]
-[ext_resource type="PackedScene" path="res://Objects/TestLevel.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://duoynlaqtady0" path="res://Objects/TestLevel.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://jjb7aco38vlb" path="res://Objects/M113.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://fj1u1fbw8uil" path="res://Objects/CameraRig.tscn" id="4"]
 [ext_resource type="PackedScene" uid="uid://dml5adtqv70u6" path="res://Objects/VehicleManager.tscn" id="5"]
@@ -52,51 +52,39 @@ anchors_preset = 0
 offset_right = 1280.0
 offset_bottom = 720.0
 
-[node name="Hint" type="Label" parent="DebugUI"]
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugUI"]
 layout_mode = 0
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 20.0
-offset_top = 20.0
-offset_right = -289.0
-offset_bottom = -292.0
+offset_right = 382.0
+offset_bottom = 129.0
+
+[node name="Hint" type="Label" parent="DebugUI/VBoxContainer"]
+layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Press ` to enable/disable viewing of forces.
 Press ESC to restrict/unrestrict mouse to window.
 Press R to reset vehicle."
 
-[node name="FPS" type="Label" parent="DebugUI"]
-layout_mode = 0
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 20.0
-offset_top = 70.568
-offset_right = -582.0
-offset_bottom = -275.432
+[node name="FPS" type="Label" parent="DebugUI/VBoxContainer"]
+layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "FPS: 0"
 script = SubResource("2")
 
-[node name="PhysicsMS" type="Label" parent="DebugUI"]
-layout_mode = 0
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 20.0
-offset_top = 92.0
-offset_right = -515.0
-offset_bottom = -251.0
+[node name="PhysicsMS" type="Label" parent="DebugUI/VBoxContainer"]
+layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Physics (ms): 0"
 script = SubResource("3")
 
 [node name="ChangeButton" type="Button" parent="DebugUI"]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = -1
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 360.998
-offset_top = 20.0
-offset_right = -96.002
-offset_bottom = -298.0
+offset_left = 491.0
+offset_top = 7.0
+offset_right = 36.0
+offset_bottom = -311.0
 text = "Change to 4WD vehicle"
 
 [node name="Speedometer" type="Label" parent="." node_paths=PackedStringArray("vehicle")]
