@@ -3,7 +3,7 @@ class_name DriveElement
 
 # control variables
 @export var shape : Shape3D
-@export var mask : int = 1 # (int, LAYERS_3D_PHYSICS)
+@export_flags_3d_physics var mask : int = 1
 @export var castTo : Vector3 = Vector3(0,-1,0)
 @export var springMaxForce : float = 300.0
 @export var springForce : float = 180.0
@@ -99,7 +99,7 @@ func _physics_process(delta) -> void:
 		DrawLine3D.DrawCube(global_transform.origin,0.1,Color(255,0,255))
 		DrawLine3D.DrawCube(global_transform.origin + castTo,0.1,Color(255,128,255))
 	# [1, 1] means no hit (from docs)
-	if castResult.hit_distance != abs(castTo.y):
+	if not is_equal_approx(castResult.hit_distance, abs(castTo.y)):
 		# if grounded, handle forces
 		grounded = true
 #		collisionPoint = castResult.hit_position
