@@ -40,27 +40,27 @@ func shape_cast(origin: Vector3, offset: Vector3):
 	params.collision_mask = mask
 	params.set_shape(shape)
 	params.transform = transform
-	params.transform.origin = origin
+	params.transform.origin = origin - offset
 	# exclude parent body!
 	params.exclude = [parentBody]
-	
+
 	# cast motion to get max motion possible with this cast
-	params.motion = offset
+	params.motion = offset * 2
 	var castResult = space.cast_motion(params)
 
 	var result : ShapeCastResult = ShapeCastResult.new()
-	
-	result.hit_distance = castResult[0] * offset.length()
-	result.hit_position = origin + offset * castResult[0]
-	
+
+	result.hit_distance = (-1 + 2 * castResult[0]) * offset.length()
+	result.hit_position = origin - offset + 2 * offset * castResult[0]
+
 	# offset the params to the cast hit point and get rest info for more information
-	params.transform.origin += offset * castResult[1]
+	params.transform.origin += 2 * offset * castResult[1]
 	var collision = space.get_rest_info(params)
-	
+
 	result.hit_normal = collision.get("normal", Vector3.ZERO)
 	result.hit_point_velocity = Vector3.ZERO
 	result.hit_body = null
-	
+
 	# if a valid object has been hit
 	if collision.get("rid"):
 		# get the reference to the actual PhysicsBody that we are in contact with
@@ -71,13 +71,13 @@ func shape_cast(origin: Vector3, offset: Vector3):
 		result.hit_point_velocity = hitBodyState.get_velocity_at_local_position(hitBodyPoint * hitBodyState.transform)
 		if GameState.debugMode:
 			DrawLine3D.DrawRay(result.hit_position,result.hit_point_velocity,Color(0,0,0))
-	
+
 	return result
 
 # getter for collision point
 func get_collision_point() -> Vector3:
 	return collisionPoint
-	
+
 # getter for collision check
 func is_colliding() -> bool:
 	return grounded
@@ -99,56 +99,56 @@ func _physics_process(delta) -> void:
 		DrawLine3D.DrawCube(global_transform.origin,0.1,Color(255,0,255))
 		DrawLine3D.DrawCube(global_transform.origin + castTo,0.1,Color(255,128,255))
 	# [1, 1] means no hit (from docs)
-	if not is_equal_approx(castResult.hit_distance, abs(castTo.y)):
+	if castResult.hit_distance < abs(castTo.y):
 		# if grounded, handle forces
 		grounded = true
 #		collisionPoint = castResult.hit_position
 		if GameState.debugMode:
 			DrawLine3D.DrawCube(castResult.hit_position,0.04,Color(0,255,255))
 			DrawLine3D.DrawRay(castResult.hit_position,castResult.hit_normal,Color(255,255,255))
-		
+
 		# obtain instantaneaous linear velocity
 		instantLinearVelocity = (collisionPoint - previousHit.hit_position) / delta
-		
+
 		# apply spring force with damping force
 		var curDistance : float = castResult.hit_distance
-		var FSpring : float = stifness * (abs(castTo.y) - curDistance) 
+		var FSpring : float = stifness * (abs(castTo.y) - curDistance)
 		var FDamp : float = damping * (previousDistance - curDistance) / delta
 		var suspensionForce : float = clamp((FSpring + FDamp) * springForce,0,springMaxForce)
 		var suspensionForceVec : Vector3 = castResult.hit_normal * suspensionForce
-		
+
 		# obtain axis velocity
-		var localVelocity : Vector3 = (instantLinearVelocity - castResult.hit_point_velocity) * global_transform.basis 
-		
+		var localVelocity : Vector3 = (instantLinearVelocity - castResult.hit_point_velocity) * global_transform.basis
+
 		# axis deceleration forces based on this drive elements mass and current acceleration
 		var XAccel : float = (-localVelocity.x * Xtraction) / delta
 		var ZAccel : float = (-localVelocity.z * Ztraction) / delta
 		var XForce : Vector3 = global_transform.basis.x * XAccel * massKG
 		var ZForce : Vector3 = global_transform.basis.z * ZAccel * massKG
-		
+
 		# counter sliding by negating off axis suspension impulse at very low speed
 		var vLimit : float = instantLinearVelocity.length_squared() * delta
 		if vLimit < staticSlideThreshold:
 #			suspensionForceVec = Vector3.UP * suspensionForce
 			XForce.x -= suspensionForceVec.x * parentBody.global_transform.basis.y.dot(Vector3.UP)
 			ZForce.z -= suspensionForceVec.z * parentBody.global_transform.basis.y.dot(Vector3.UP)
-		
+
 		# final impulse force vector to be applied
 		var finalForce = suspensionForceVec + XForce + ZForce
-		
+
 		# draw debug lines
 		if GameState.debugMode:
 			DrawLine3D.DrawRay(get_collision_point(),suspensionForceVec/GameState.debugRayScaleFac,Color(0,255,0))
 			DrawLine3D.DrawRay(get_collision_point(),XForce/GameState.debugRayScaleFac,Color(255,0,0))
 			DrawLine3D.DrawRay(get_collision_point(),ZForce/GameState.debugRayScaleFac,Color(0,0,255))
-			
+
 		# apply forces relative to parent body
 		parentBody.apply_force(finalForce, get_collision_point() - parentBody.global_transform.origin)
-		
+
 		# apply forces to body affected by this drive element (action = reaction)
 		if castResult.hit_body && castResult.hit_body is RigidBody3D:
 			castResult.hit_body.apply_force(-finalForce, get_collision_point() - castResult.hit_body.global_transform.origin)
-		
+
 		# set the previous values at the very end, after they have been used
 		previousDistance = curDistance
 		previousHit = castResult
