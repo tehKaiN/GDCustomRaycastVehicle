@@ -1,4 +1,19 @@
-[gd_scene load_steps=20 format=3 uid="uid://duoynlaqtady0"]
+[gd_scene load_steps=23 format=3 uid="uid://duoynlaqtady0"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nhrbs"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_ci5ju"]
+sky_material = SubResource("ProceduralSkyMaterial_nhrbs")
+
+[sub_resource type="Environment" id="Environment_atcnk"]
+background_mode = 2
+sky = SubResource("Sky_ci5ju")
+tonemap_mode = 2
+ssao_enabled = true
+sdfgi_enabled = true
+glow_enabled = true
 
 [sub_resource type="PhysicsMaterial" id="24"]
 rough = true
@@ -56,6 +71,7 @@ albedo_color = Color(0.152941, 0.152941, 0.152941, 1)
 
 [sub_resource type="CylinderMesh" id="18"]
 material = SubResource("17")
+bottom_radius = 1.0
 height = 10.0
 
 [sub_resource type="ConvexPolygonShape3D" id="19"]
@@ -63,10 +79,14 @@ points = PackedVector3Array(0, 5, 0.5, 0.0490086, 5, 0.497592, 0.0975452, 5, 0.4
 
 [node name="TestLevel" type="Node3D"]
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_atcnk")
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.998024, 0.0570876, -0.0262618, 0.0100297, 0.557285, 0.830261, 0.0620329, 0.828356, -0.556756, 0, 21.6264, 0)
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+light_color = Color(1, 0.816667, 0, 1)
+light_energy = 0.4
 shadow_enabled = true
-directional_shadow_mode = 0
 
 [node name="Plank" type="RigidBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1.88044, -12)
