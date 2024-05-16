@@ -34,12 +34,12 @@ func _handle_physics(delta) -> void:
 	for driveElement in driveElements:
 		var finalForce : Vector3 = Vector3.ZERO
 		var finalBrake : float = rollingResistance
-		
+
 		# get throttle axis
 		var forwardDrive : float = Input.get_axis("reverse", "forward")
 		# get steering axis
 		var steering : float = Input.get_axis("steer_left", "steer_right")
-		
+
 		# steer wheels gradualy based on steering input
 		if steering != 0:
 			var desiredAngle : float = steering * steeringAngle
@@ -53,7 +53,7 @@ func _handle_physics(delta) -> void:
 					currentSteerAngle += steerReturnSpeed * delta
 			else:
 				currentSteerAngle = 0.0
-		
+
 		# limit steering based on speed and apply steering
 		var maxSteerRatio : float = remap(currentSpeed * 3.6, 0, maxSpeedKph, 0, maxSteerLimitRatio)
 		maxSteerAngle = (1 - maxSteerRatio) * steeringAngle
@@ -68,11 +68,11 @@ func _handle_physics(delta) -> void:
 		# brake if movement opposite indended direction
 		if sign(currentSpeed) != sign(forwardDrive) && !is_zero_approx(currentSpeed) && forwardDrive != 0:
 			finalBrake = maxBrakingCoef * abs(forwardDrive)
-			
+
 		# no drive inputs, apply parking brake if sitting still
 		if forwardDrive == 0 && steering == 0 && abs(currentSpeed) < autoStopSpeedMS:
 			finalBrake = maxBrakingCoef
-		
+
 		# calculate motor forces
 		var speedInterp : float
 		if forwardDrive > 0:
@@ -80,9 +80,9 @@ func _handle_physics(delta) -> void:
 		elif forwardDrive < 0:
 			speedInterp = remap(abs(currentSpeed), 0.0, maxReverseSpeedKph / 3.6, 0.0, 1.0)
 		currentDrivePower = torqueCurve.sample_baked(speedInterp) * drivePerRay
-		
+
 		finalForce = global_transform.basis.z * currentDrivePower * forwardDrive
-		
+
 		# apply drive force and braking
 		driveElement.apply_force(finalForce)
 		driveElement.apply_brake(finalBrake)
@@ -93,8 +93,8 @@ func _ready() -> void:
 		if node is DriveElement:
 			driveElements.append(node)
 	drivePerRay = enginePower / driveElements.size()
-	print("Found %d drive elements connected to wheeled vehicle, setting to provide %.2f force each." % [driveElements.size(), drivePerRay]) 
-	
+	print("Found %d drive elements connected to wheeled vehicle, setting to provide %.2f force each." % [driveElements.size(), drivePerRay])
+
 func _physics_process(delta) -> void:
 	# calculate forward speed
 	currentSpeed = (linear_velocity * global_transform.basis).z

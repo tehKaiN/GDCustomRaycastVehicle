@@ -32,16 +32,16 @@ var currentSteerBrakePower : float = 0.0
 var currentSpeed : float = 0.0
 
 var lastSteerValue : float = 0.0
-	
+
 func _handle_physics(delta) -> void:
 	# get throttle and steering input
 	var forwardDrive : float = Input.get_axis("reverse", "forward")
 	var steering : float = Input.get_axis("steer_left", "steer_right")
-	
+
 	# Invert steering when reversing if enabled
 	if forwardDrive < 0 && invertSteerWhenReverse:
 		steering *= -1
-	
+
 	# calculate speed interpolation
 	var speedInterp : float
 	# forward, use forward max speed
@@ -53,7 +53,7 @@ func _handle_physics(delta) -> void:
 	# steering drive (always at start of curve)
 	elif forwardDrive == 0 && steering != 0:
 		speedInterp = 0
-	
+
 	# get force from torque curve (based on current speed)
 	currentDrivePower = torqueCurve.sample_baked(speedInterp) * drivePerRay
 
@@ -63,43 +63,43 @@ func _handle_physics(delta) -> void:
 		var leftForce : Vector3 = Vector3.ZERO
 		var rightForce : Vector3 = Vector3.ZERO
 		var braking : float = rollingResistance
-		
+
 		# calculate drive forces
 		var LDriveFac : float = forwardDrive + steering
 		var RDriveFac : float = forwardDrive + steering * -1
 		leftForce = global_transform.basis.z * currentDrivePower * LDriveFac
 		rightForce = global_transform.basis.z * currentDrivePower * RDriveFac
-		
+
 		# no brakes during normal driving
 		if LDriveFac != 0 || RDriveFac != 0:
 			braking = 0
-		
+
 		# slow down if input opposite drive direction
 		if sign(currentSpeed) != sign(forwardDrive):
 			braking = trackBrakePercent * abs(forwardDrive)
-		
+
 		# apply parking brake if sitting still
 		if forwardDrive == 0 && steering == 0 && abs(currentSpeed) < autoStopSpeedMS:
 			braking = trackBrakePercent
-		
+
 		# finally apply all forces and braking
 		for element in leftDriveElements:
 			element.apply_force(leftForce)
 			element.apply_brake(braking)
-			
+
 		for element in rightDriveElements:
 			element.apply_force(rightForce)
 			element.apply_brake(braking)
-		
+
 	elif driveTrainMode == DriveMode.BRAKED_DIFF:
 		# braked differential setup (steer with braking)
 		var driveForce : Vector3 = Vector3.ZERO
 		var leftBraking : float = rollingResistance
 		var rightBraking : float = rollingResistance
-		
+
 		# calculate drive force
 		driveForce = global_transform.basis.z * currentDrivePower * forwardDrive
-		
+
 		# reset steering if opposite input used
 		if sign(steering) != sign(lastSteerValue):
 			currentSteerBrakePower = 0
@@ -111,7 +111,7 @@ func _handle_physics(delta) -> void:
 			currentSteerBrakePower = move_toward(currentSteerBrakePower, 0, trackBrakingSpeed * delta)
 		# set last steer value
 		lastSteerValue = steering
-		
+
 		# calculate steering brake
 		if steering < 0:
 			leftBraking = currentSteerBrakePower * abs(steering)
@@ -119,37 +119,37 @@ func _handle_physics(delta) -> void:
 		else:
 			leftBraking = 0
 			rightBraking = currentSteerBrakePower * abs(steering)
-		
+
 		# slow down if input opposite drive direction
 		if sign(currentSpeed) != sign(forwardDrive):
 			leftBraking = trackBrakePercent * abs(forwardDrive)
 			rightBraking = trackBrakePercent * abs(forwardDrive)
-		
+
 		# apply parking brake if sitting still
 		if forwardDrive == 0 && steering == 0 && abs(currentSpeed) < autoStopSpeedMS:
 			leftBraking = trackBrakePercent
 			rightBraking = trackBrakePercent
-		
+
 		# finally apply all forces and braking
 		for element in leftDriveElements:
 			element.apply_force(driveForce)
 			element.apply_brake(leftBraking)
-			
+
 		for element in rightDriveElements:
 			element.apply_force(driveForce)
 			element.apply_brake(rightBraking)
-		
+
 	elif driveTrainMode == DriveMode.DIRECT_FORCES:
 		# Drive and turn using direct forces on vehicle body
 		# recalculate engine power
 		if sign(currentSpeed) != sign(forwardDrive):
 			speedInterp = 0
 		currentDrivePower = torqueCurve.interpolate_baked(speedInterp) * enginePower/2
-		
+
 		# calculate track forces
 		var leftDriveForce : Vector3 = global_transform.basis.z * currentDrivePower * (forwardDrive + steering)
 		var rightDriveForce : Vector3 = global_transform.basis.z * currentDrivePower * (forwardDrive + steering * -1)
-		
+
 		# check grounded status
 		var leftTrackGrounded : bool = false
 		var rightTrackGrounded : bool = false
@@ -159,7 +159,7 @@ func _handle_physics(delta) -> void:
 		for element in rightDriveElements:
 			if element.grounded:
 				rightTrackGrounded = true
-		
+
 		# apply track forces
 		if leftTrackGrounded:
 			apply_force(leftDriveForce, to_global(Vector3(1.5, -0.2, 0)) - global_transform.origin)
@@ -176,7 +176,7 @@ func _ready() -> void:
 				rightDriveElements.append(node)
 	drivePerRay = enginePower / (leftDriveElements.size()+rightDriveElements.size())
 	print("Found %d track elements connected to vehicle. Each driveElement providing %.2f force each." % [leftDriveElements.size()+rightDriveElements.size(), drivePerRay])
-	
+
 func _physics_process(delta) -> void:
 	# calculate forward speed
 	currentSpeed = (linear_velocity * global_transform.basis).z
