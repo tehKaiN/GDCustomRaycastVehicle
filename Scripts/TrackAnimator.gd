@@ -29,19 +29,19 @@ func _physics_process(delta) -> void:
 	var instantV = (global_transform.origin - lastPos) / delta
 	var ZVel = (instantV * global_transform.basis).z
 	lastPos = global_transform.origin
-		
+
 	# animate wheels
 	# NOTE: The rotation is bugged in 3.1, it's fixed in 3.2 Beta 1
 	for wheel in roadWheels:
 		wheel.rotate_x(ZVel * wheelSpeedScaling * delta)
-		
+
 	# animate drive sprocket and idler
 	sprocket.rotate_x(ZVel * sprocketSpeedScaling * delta)
 	idler.rotate_x(ZVel * idlerSpeedScaling * delta)
-	
+
 	# animate track texture
 	trackMat.uv1_offset.y += (ZVel * trackUVScaling) * delta
-	
-	# clamp UV offset of tracks	
+
+	# clamp UV offset of tracks
 	if trackMat.uv1_offset.y > 1.0 or trackMat.uv1_offset.y < -1.0:
 		trackMat.uv1_offset.y = 0.0

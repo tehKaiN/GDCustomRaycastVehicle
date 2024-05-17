@@ -12,16 +12,16 @@ var lastPos : Vector3 = Vector3()
 func _ready() -> void:
 	# setup references
 	wheelRay = get_parent()
-	
+
 func _physics_process(delta) -> void:
 	# obtain velocity of the wheel
 	var instantV = (global_transform.origin - lastPos) / delta
 	var ZVel = (instantV * wheelRay.global_transform.basis).z
 	lastPos = global_transform.origin
-	
+
 	# rotate the wheel according to speed
 	rotate_x(ZVel * wheelSpeedScaling * delta)
-	
+
 	# set the wheel position
 	if wheelRay.is_colliding():
 		transform.origin.y = (wheelRay.to_local(wheelRay.get_collision_point()) + wheelOffset).y
