@@ -1,5 +1,5 @@
-extends Node3D
 class_name DriveElement
+extends Node3D
 
 # control variables
 @export var shape : Shape3D

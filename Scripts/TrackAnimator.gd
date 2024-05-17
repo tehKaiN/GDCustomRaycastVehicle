@@ -1,7 +1,7 @@
 extends MeshInstance3D
 
 # public variables
-@export var roadWheelPaths : Array
+@export var roadWheelPaths : Array[NodePath]
 @export var sprocketPath: NodePath
 @export var idlerPath: NodePath
 @export var wheelSpeedScaling : float = 1.0
