@@ -8,6 +8,7 @@ extends MeshInstance3D
 @export var sprocketSpeedScaling : float = 1.6
 @export var idlerSpeedScaling : float = 1.5
 @export var trackUVScaling : float = 1.0
+@export var animate_track_texture := true
 
 # private variables
 var roadWheels : Array
@@ -39,9 +40,10 @@ func _physics_process(delta) -> void:
 	sprocket.rotate_x(ZVel * sprocketSpeedScaling * delta)
 	idler.rotate_x(ZVel * idlerSpeedScaling * delta)
 
-	# animate track texture
-	trackMat.uv1_offset.y += (ZVel * trackUVScaling) * delta
+	if animate_track_texture:
+		# animate track texture
+		trackMat.uv1_offset.y += (ZVel * trackUVScaling) * delta
 
-	# clamp UV offset of tracks
-	if trackMat.uv1_offset.y > 1.0 or trackMat.uv1_offset.y < -1.0:
-		trackMat.uv1_offset.y = 0.0
+		# clamp UV offset of tracks
+		if trackMat.uv1_offset.y > 1.0 or trackMat.uv1_offset.y < -1.0:
+			trackMat.uv1_offset.y = 0.0
