@@ -14,21 +14,21 @@ extends Node3D
 @export var staticSlideThreshold: float = 0.005
 @export var massKG: float = 100.0
 @export var equilibrium_offset := Vector3(0, 0, 0)
+@export var _parent_body: RigidBody3D
 
 # public variables
 var instant_linear_velocity: Vector3
 
 # private variables
-@onready var _parent_body: RigidBody3D = get_parent()
 @onready var _previous_distance: float = absf(castTo.y)
 @onready var _collision_point: Vector3 = castTo
 var _previous_hit: ShapeCastResult = ShapeCastResult.new()
 var _is_grounded: bool = false
 var _cast_params: PhysicsShapeQueryParameters3D
+var _initial_offset : Vector3
 
 # shape cast result storage class
 class ShapeCastResult:
-	var is_hit: bool
 	var hit_distance: float
 	var hit_position: Vector3
 	var hit_normal: Vector3
@@ -40,17 +40,26 @@ func shape_cast(origin: Vector3, offset: Vector3) -> ShapeCastResult:
 	var space: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state as PhysicsDirectSpaceState3D
 
 	# cast motion to get max motion possible with this cast
-	_cast_params.transform.origin = origin - offset
-	_cast_params.motion = offset * 2
-	var castResult = space.cast_motion(_cast_params)
+	var vehicle_basis := get_parent_node_3d().global_transform.basis
+	_cast_params.transform = transform
+	_cast_params.transform.origin = origin - vehicle_basis * offset
+	_cast_params.motion =  vehicle_basis * offset * 2
+
+	if GameState.debugMode:
+		DrawLine3D.DrawCube(_cast_params.transform.origin, 0.1, Color.MEDIUM_SEA_GREEN)
+		DrawLine3D.DrawCube(_cast_params.transform.origin + _cast_params.motion / 2, 0.1, Color.MAGENTA)
+		DrawLine3D.DrawCube(_cast_params.transform.origin + _cast_params.motion, 0.1, Color.DARK_MAGENTA)
+
+	var cast_result = space.cast_motion(_cast_params)
 
 	var result: ShapeCastResult = ShapeCastResult.new()
+	var cast_result_safe_normalized = (-1 + 2 * cast_result[0])
 
-	result.hit_distance = (-1 + 2 * castResult[0]) * offset.length()
-	result.hit_position = origin - offset + 2 * offset * castResult[0]
+	result.hit_distance = cast_result_safe_normalized * offset.length()
+	result.hit_position = origin + vehicle_basis * offset * cast_result_safe_normalized
 
 	# offset the params to the cast hit point and get rest info for more information
-	_cast_params.transform.origin += 2 * offset * castResult[1]
+	_cast_params.transform.origin += vehicle_basis * 2 * offset * cast_result[1]
 	var collision = space.get_rest_info(_cast_params)
 
 	result.hit_normal = collision.get("normal", Vector3.ZERO)
@@ -91,19 +100,15 @@ func _ready() -> void:
 	_cast_params = PhysicsShapeQueryParameters3D.new()
 	_cast_params.collision_mask = mask
 	_cast_params.set_shape(shape)
-	_cast_params.transform = transform
+	_initial_offset = position
 	# exclude parent body!
 	_cast_params.exclude = [_parent_body]
 
 func _physics_process(delta: float) -> void:
 	# perform sphere cast
-	var equilibrium_point := global_transform.origin + equilibrium_offset
+	var equilibrium_point := (global_position - position + _initial_offset) + equilibrium_offset
 	var cast_result = shape_cast(equilibrium_point, castTo)
 	_collision_point = cast_result.hit_position
-	if GameState.debugMode:
-		DrawLine3D.DrawCube(equilibrium_point - castTo, 0.1, Color.DARK_MAGENTA)
-		DrawLine3D.DrawCube(equilibrium_point, 0.1, Color.MAGENTA)
-		DrawLine3D.DrawCube(equilibrium_point + castTo, 0.1, Color.DARK_MAGENTA)
 
 	if cast_result.hit_distance < absf(castTo.y):
 		# if grounded, handle forces

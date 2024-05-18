@@ -20,11 +20,10 @@ func _redraw(gizmo: EditorNode3DGizmo) -> void:
 	gizmo.clear()
 
 	var suspension_animator := gizmo.get_node_3d() as SuspensionAnimator
-	var drive_element := suspension_animator.raycast as DriveElement
 	# var lines := PackedVector3Array()
 
 	# lines.push_back(Vector3(0, 0, 0))
-	# lines.push_back(drive_element.castTo)
+	# lines.push_back(suspension_animator.castTo)
 #
 	#var handles = PackedVector3Array()
 #
@@ -33,9 +32,12 @@ func _redraw(gizmo: EditorNode3DGizmo) -> void:
 #
 	# gizmo.add_lines(lines, get_material("main", gizmo), false)
 	#gizmo.add_handles(handles, get_material("handles", gizmo), [])
-	if drive_element:
-		var mesh := drive_element.shape.get_debug_mesh()
-		var equilibrium_transform := Transform3D.IDENTITY.translated(drive_element.equilibrium_offset)
-		gizmo.add_mesh(mesh, null, equilibrium_transform)
-		var transform := equilibrium_transform.translated(drive_element.castTo)
-		gizmo.add_mesh(mesh, get_material("main", gizmo), transform)
+	var default_material : Material = null
+	var main_material := get_material("main", gizmo)
+
+	var mesh := suspension_animator.shape.get_debug_mesh()
+	if mesh:
+		var equilibrium_transform := Transform3D.IDENTITY.translated(suspension_animator.equilibrium_offset)
+		gizmo.add_mesh(mesh, default_material, equilibrium_transform)
+		var transform := equilibrium_transform.translated(suspension_animator.castTo)
+		gizmo.add_mesh(mesh, main_material, transform)
