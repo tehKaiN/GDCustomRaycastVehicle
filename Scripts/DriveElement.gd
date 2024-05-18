@@ -46,9 +46,9 @@ func shape_cast(origin: Vector3, offset: Vector3) -> ShapeCastResult:
 	_cast_params.motion =  vehicle_basis * offset * 2
 
 	if GameState.debugMode:
-		DrawLine3D.DrawCube(_cast_params.transform.origin, 0.1, Color.MEDIUM_SEA_GREEN)
-		DrawLine3D.DrawCube(_cast_params.transform.origin + _cast_params.motion / 2, 0.1, Color.MAGENTA)
-		DrawLine3D.DrawCube(_cast_params.transform.origin + _cast_params.motion, 0.1, Color.DARK_MAGENTA)
+		DrawLine3D.DrawCube(_cast_params.transform.origin, 0.1, Color.STEEL_BLUE)
+		DrawLine3D.DrawCube(_cast_params.transform.origin + _cast_params.motion / 2, 0.1, Color.ROYAL_BLUE)
+		DrawLine3D.DrawCube(_cast_params.transform.origin + _cast_params.motion, 0.1, Color.SLATE_BLUE)
 
 	var cast_result = space.cast_motion(_cast_params)
 

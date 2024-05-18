@@ -2,7 +2,7 @@ extends EditorNode3DGizmoPlugin
 
 
 func _has_gizmo(node):
-	return node is SuspensionAnimator
+	return node is TrackDriveElement
 
 func get_name():
 	return "CustomNode"
@@ -19,7 +19,7 @@ func _init():
 func _redraw(gizmo: EditorNode3DGizmo) -> void:
 	gizmo.clear()
 
-	var suspension_animator := gizmo.get_node_3d() as SuspensionAnimator
+	var suspension_animator := gizmo.get_node_3d() as TrackDriveElement
 	# var lines := PackedVector3Array()
 
 	# lines.push_back(Vector3(0, 0, 0))

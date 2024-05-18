@@ -1,4 +1,4 @@
-class_name SuspensionAnimator
+class_name TrackDriveElement
 extends DriveElement
 
 # public variables
