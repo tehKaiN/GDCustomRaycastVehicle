@@ -28,10 +28,10 @@ func _input(event) -> void:
 		# Rotate the rig around the target using mouse
 		rotation.y -= event.relative.x * horizontalSensitivity
 		rotation.y = wrapf(rotation.y,0.0,TAU)
-		
+
 		rotation.x -= event.relative.y * verticalSensitivity
 		rotation.x = clamp(rotation.x, deg_to_rad(minPitchDeg), deg_to_rad(maxPitchDeg))
-		
+
 	if event is InputEventMouseButton:
 		# Change zoom level on mouse wheel rotation
 		if event.is_pressed():
@@ -45,11 +45,11 @@ func _input(event) -> void:
 func _physics_process(delta) -> void:
 	# zoom the camera accordingly
 	_springArm.spring_length = lerp(_springArm.spring_length, _curZoom, delta * camLerpSpeed)
-	
+
 	# set the position of the rig to follow the target
 	_curYoffset = lerp(_curYoffset, camYOffset, delta * camLerpSpeed)
 	set_position(_camTarget.global_transform.origin + Vector3(0,_curYoffset,0))
-	
+
 	# rotate rig aaccording to joystick rotation
 	var joyStickInput : Vector2 = Input.get_vector("cam_rotate_down", "cam_rotate_up", "cam_rotate_left", "cam_rotate_right")
 	rotation.y -= joyStickInput.y * horizontalSensitivity * 1000 * delta
