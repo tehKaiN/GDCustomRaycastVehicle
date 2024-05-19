@@ -22,8 +22,8 @@ enum DriveMode {
 
 @export var autoStopSpeedMS := 1.0
 
-@export var left_track: TrackAnimator
-@export var right_track: TrackAnimator
+@export var left_track: VehicleTrackController
+@export var right_track: VehicleTrackController
 
 var _drive_per_ray := enginePower
 var _current_drive_power := 0.0

@@ -1,4 +1,4 @@
-class_name TrackAnimator
+class_name VehicleTrackController
 extends MeshInstance3D
 
 # public variables
