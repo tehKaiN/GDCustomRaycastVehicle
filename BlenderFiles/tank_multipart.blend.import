@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/tank_multipart.blend-c7f987005f84b574d30d9ace
 
 [params]
 
-nodes/root_type=""
+nodes/root_type="TrackedRaycastVehicleController"
 nodes/root_name=""
 nodes/apply_root_scale=true
 nodes/root_scale=1.0

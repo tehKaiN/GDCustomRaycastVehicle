@@ -1,3 +1,4 @@
+class_name VehicleManager
 extends Node
 
 @export var vehiclePath: NodePath

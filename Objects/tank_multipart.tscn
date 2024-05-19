@@ -1,0 +1,224 @@
+[gd_scene load_steps=7 format=3 uid="uid://dmxpqopawffwd"]
+
+[ext_resource type="PackedScene" uid="uid://b1nb06iv4gei2" path="res://BlenderFiles/tank_multipart.blend" id="1_726rs"]
+[ext_resource type="Curve" path="res://default_acceleration_curve.tres" id="2_6tvhe"]
+[ext_resource type="Script" path="res://Scripts/TrackDriveElement.gd" id="2_nb1co"]
+[ext_resource type="Script" path="res://Scripts/VehicleTrackController.gd" id="3_dqa0t"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_wd0fl"]
+points = PackedVector3Array(2.71493, -0.657012, -8.01572, 2.71493, -1.29531, -8.0196, 2.71493, -0.586266, -8.08676, 2.70009, -0.5718, -5.46488, 2.64445, -1.25417, 4.45307, 2.69002, -0.989269, -3.60244, 2.7144, -1.66983, -8.00151, 2.71493, -1.66983, -8.10096, 2.67731, -1.62191, -1.35769, 1.76745, -0.69521, -8.11, 1.84799, -0.586266, -8.09192, 2.64445, -0.552588, -8.03768, 2.63014, -0.538574, -5.51525, 2.64392, -1.16105, 4.48923, 2.64074, -1.68633, 5.05881, 2.64074, -1.78917, 5.06398, 1.45162, -2.33073, -8.05834, 0.839571, -2.27377, -8.09321, 1.84852, -1.66983, -8.10613, 1.76745, -1.42798, -8.11, 2.64127, -1.78917, 4.96324, 1.80719, -2.84765, -0.789403, 1.80931, -2.83364, -1.2337, 1.8321, -2.62411, -5.20915, -0.936694, -0.69521, -8.1255, -1.82801, -0.552588, -8.06351, -2.62393, -0.586266, -8.11646, -1.84231, -0.538574, -5.53979, 1.90416, -0.538574, -5.51912, 2.53582, -1.11743, 4.41303, -1.93664, -1.11743, 4.38849, -2.69494, -1.16105, 4.45952, -1.83171, -1.68633, 5.03427, -1.83171, -1.78917, 5.03815, -1.82748, -2.44284, 4.3407, 1.77805, -2.44284, 4.36137, 1.78652, -2.70661, 2.86056, 1.43731, -2.61349, -5.48812, -0.856147, -2.33073, -8.07126, -0.0363731, -2.27377, -8.09838, -1.757, -1.66983, -8.12679, -0.936694, -1.42798, -8.1255, -1.79833, -2.84765, -0.810069, -1.79568, -2.83364, -1.25437, -1.67592, -0.69521, -8.12938, -2.55399, -0.552588, -8.06738, -2.56776, -0.538574, -5.54366, -2.62393, -1.66983, -8.13067, -2.62446, -0.657012, -8.04543, -2.63877, -0.5718, -5.49458, -2.58578, -1.11743, 4.38461, -2.69494, -1.25417, 4.42207, -2.69812, -1.68633, 5.02911, -2.69812, -1.78917, 5.03298, -1.819, -2.70661, 2.8399, -1.37546, -2.61349, -5.50362, -1.36115, -2.33073, -8.07384, -0.748575, -2.27377, -8.10225, -1.67592, -1.42798, -8.12938, -2.69759, -1.78917, 4.93353, -1.77342, -2.62411, -5.22852, -2.62446, -1.29531, -8.0493, -2.66315, -1.63548, -1.24145, -2.66527, -1.11969, -0.863023)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_w5l0u"]
+radius = 0.55
+
+[node name="TankMultipart" node_paths=PackedStringArray("left_track", "right_track") instance=ExtResource("1_726rs")]
+collision_layer = 2
+collision_mask = 3
+mass = 2000.0
+can_sleep = false
+linear_damp = 0.1
+angular_damp = 0.8
+enginePower = 15000.0
+torqueCurve = ExtResource("2_6tvhe")
+left_track = NodePath("TrackArmatureL/TrackL")
+right_track = NodePath("TrackArmatureR/TrackR")
+
+[node name="HullCollision" type="CollisionShape3D" parent="." index="0"]
+transform = Transform3D(0.999984, 0, 0.00565386, 0, 1, 0, -0.00565386, 0, 0.999984, -0.357718, 3, 0)
+shape = SubResource("ConvexPolygonShape3D_wd0fl")
+
+[node name="RoadWheelL1" parent="." index="18" node_paths=PackedStringArray("track_skeleton", "_parent_body")]
+script = ExtResource("2_nb1co")
+boneName = "wheel1"
+track_skeleton = NodePath("../TrackArmatureL/Skeleton3D")
+shape = SubResource("SphereShape3D_w5l0u")
+castTo = Vector3(0, -0.4, 0)
+springMaxForce = 30000.0
+springForce = 20000.0
+Xtraction = 0.1
+Ztraction = 0.0
+massKG = 250.0
+_parent_body = NodePath("..")
+
+[node name="RoadWheelL2" parent="." index="19" node_paths=PackedStringArray("track_skeleton", "_parent_body")]
+script = ExtResource("2_nb1co")
+boneName = "wheel2"
+track_skeleton = NodePath("../TrackArmatureL/Skeleton3D")
+shape = SubResource("SphereShape3D_w5l0u")
+castTo = Vector3(0, -0.4, 0)
+springMaxForce = 30000.0
+springForce = 20000.0
+Xtraction = 0.1
+Ztraction = 0.0
+massKG = 250.0
+_parent_body = NodePath("..")
+
+[node name="RoadWheelL3" parent="." index="20" node_paths=PackedStringArray("track_skeleton", "_parent_body")]
+script = ExtResource("2_nb1co")
+boneName = "wheel3"
+track_skeleton = NodePath("../TrackArmatureL/Skeleton3D")
+shape = SubResource("SphereShape3D_w5l0u")
+castTo = Vector3(0, -0.4, 0)
+springMaxForce = 30000.0
+springForce = 20000.0
+Xtraction = 0.1
+Ztraction = 0.0
+massKG = 250.0
+_parent_body = NodePath("..")
+
+[node name="RoadWheelL4" parent="." index="21" node_paths=PackedStringArray("track_skeleton", "_parent_body")]
+script = ExtResource("2_nb1co")
+boneName = "wheel4"
+track_skeleton = NodePath("../TrackArmatureL/Skeleton3D")
+shape = SubResource("SphereShape3D_w5l0u")
+castTo = Vector3(0, -0.4, 0)
+springMaxForce = 30000.0
+springForce = 20000.0
+Xtraction = 0.1
+Ztraction = 0.0
+massKG = 250.0
+_parent_body = NodePath("..")
+
+[node name="RoadWheelL5" parent="." index="22" node_paths=PackedStringArray("track_skeleton", "_parent_body")]
+script = ExtResource("2_nb1co")
+boneName = "wheel5"
+track_skeleton = NodePath("../TrackArmatureL/Skeleton3D")
+shape = SubResource("SphereShape3D_w5l0u")
+castTo = Vector3(0, -0.4, 0)
+springMaxForce = 30000.0
+springForce = 20000.0
+Xtraction = 0.1
+Ztraction = 0.0
+massKG = 250.0
+_parent_body = NodePath("..")
+
+[node name="RoadWheelL6" parent="." index="23" node_paths=PackedStringArray("track_skeleton", "_parent_body")]
+script = ExtResource("2_nb1co")
+boneName = "wheel6"
+track_skeleton = NodePath("../TrackArmatureL/Skeleton3D")
+shape = SubResource("SphereShape3D_w5l0u")
+castTo = Vector3(0, -0.4, 0)
+springMaxForce = 30000.0
+springForce = 20000.0
+Xtraction = 0.1
+Ztraction = 0.0
+massKG = 250.0
+_parent_body = NodePath("..")
+
+[node name="RoadWheelL7" parent="." index="24" node_paths=PackedStringArray("track_skeleton", "_parent_body")]
+script = ExtResource("2_nb1co")
+boneName = "wheel7"
+track_skeleton = NodePath("../TrackArmatureL/Skeleton3D")
+shape = SubResource("SphereShape3D_w5l0u")
+castTo = Vector3(0, -0.4, 0)
+springMaxForce = 30000.0
+springForce = 20000.0
+Xtraction = 0.1
+Ztraction = 0.0
+massKG = 250.0
+_parent_body = NodePath("..")
+
+[node name="TrackL" parent="TrackArmatureL" index="0" node_paths=PackedStringArray("road_wheels", "sprocket", "idler")]
+script = ExtResource("3_dqa0t")
+road_wheels = [NodePath("../../RoadWheelL1"), NodePath("../../RoadWheelL2"), NodePath("../../RoadWheelL3"), NodePath("../../RoadWheelL4"), NodePath("../../RoadWheelL5"), NodePath("../../RoadWheelL6"), NodePath("../../RoadWheelL7")]
+sprocket = NodePath("../../DriveSprocketL")
+idler = NodePath("../../IdlerL")
+animate_track_texture = false
+
+[node name="RoadWheelR1" parent="." index="28" node_paths=PackedStringArray("track_skeleton", "_parent_body")]
+script = ExtResource("2_nb1co")
+boneName = "wheel1"
+track_skeleton = NodePath("../TrackArmatureR/Skeleton3D")
+shape = SubResource("SphereShape3D_w5l0u")
+castTo = Vector3(0, -0.4, 0)
+springMaxForce = 30000.0
+springForce = 20000.0
+Xtraction = 0.1
+Ztraction = 0.0
+massKG = 250.0
+_parent_body = NodePath("..")
+
+[node name="RoadWheelR2" parent="." index="29" node_paths=PackedStringArray("track_skeleton", "_parent_body")]
+script = ExtResource("2_nb1co")
+boneName = "wheel2"
+track_skeleton = NodePath("../TrackArmatureR/Skeleton3D")
+shape = SubResource("SphereShape3D_w5l0u")
+castTo = Vector3(0, -0.4, 0)
+springMaxForce = 30000.0
+springForce = 20000.0
+Xtraction = 0.1
+Ztraction = 0.0
+massKG = 250.0
+_parent_body = NodePath("..")
+
+[node name="RoadWheelR3" parent="." index="30" node_paths=PackedStringArray("track_skeleton", "_parent_body")]
+script = ExtResource("2_nb1co")
+boneName = "wheel3"
+track_skeleton = NodePath("../TrackArmatureR/Skeleton3D")
+shape = SubResource("SphereShape3D_w5l0u")
+castTo = Vector3(0, -0.4, 0)
+springMaxForce = 30000.0
+springForce = 20000.0
+Xtraction = 0.1
+Ztraction = 0.0
+massKG = 250.0
+_parent_body = NodePath("..")
+
+[node name="RoadWheelR4" parent="." index="31" node_paths=PackedStringArray("track_skeleton", "_parent_body")]
+script = ExtResource("2_nb1co")
+boneName = "wheel4"
+track_skeleton = NodePath("../TrackArmatureR/Skeleton3D")
+shape = SubResource("SphereShape3D_w5l0u")
+castTo = Vector3(0, -0.4, 0)
+springMaxForce = 30000.0
+springForce = 20000.0
+Xtraction = 0.1
+Ztraction = 0.0
+massKG = 250.0
+_parent_body = NodePath("..")
+
+[node name="RoadWheelR5" parent="." index="32" node_paths=PackedStringArray("track_skeleton", "_parent_body")]
+script = ExtResource("2_nb1co")
+boneName = "wheel5"
+track_skeleton = NodePath("../TrackArmatureR/Skeleton3D")
+shape = SubResource("SphereShape3D_w5l0u")
+castTo = Vector3(0, -0.4, 0)
+springMaxForce = 30000.0
+springForce = 20000.0
+Xtraction = 0.1
+Ztraction = 0.0
+massKG = 250.0
+_parent_body = NodePath("..")
+
+[node name="RoadWheelR6" parent="." index="33" node_paths=PackedStringArray("track_skeleton", "_parent_body")]
+script = ExtResource("2_nb1co")
+boneName = "wheel6"
+track_skeleton = NodePath("../TrackArmatureR/Skeleton3D")
+shape = SubResource("SphereShape3D_w5l0u")
+castTo = Vector3(0, -0.4, 0)
+springMaxForce = 30000.0
+springForce = 20000.0
+Xtraction = 0.1
+Ztraction = 0.0
+massKG = 250.0
+_parent_body = NodePath("..")
+
+[node name="RoadWheelR7" parent="." index="34" node_paths=PackedStringArray("track_skeleton", "_parent_body")]
+script = ExtResource("2_nb1co")
+boneName = "wheel7"
+track_skeleton = NodePath("../TrackArmatureR/Skeleton3D")
+shape = SubResource("SphereShape3D_w5l0u")
+castTo = Vector3(0, -0.4, 0)
+springMaxForce = 30000.0
+springForce = 20000.0
+Xtraction = 0.1
+Ztraction = 0.0
+massKG = 250.0
+_parent_body = NodePath("..")
+
+[node name="TrackR" parent="TrackArmatureR" index="0" node_paths=PackedStringArray("road_wheels", "sprocket", "idler")]
+script = ExtResource("3_dqa0t")
+road_wheels = [NodePath("../../RoadWheelR1"), NodePath("../../RoadWheelR2"), NodePath("../../RoadWheelR3"), NodePath("../../RoadWheelR4"), NodePath("../../RoadWheelR5"), NodePath("../../RoadWheelR6"), NodePath("../../RoadWheelR7")]
+sprocket = NodePath("../../DriveSprocketR")
+idler = NodePath("../../IdlerR")
+animate_track_texture = false
